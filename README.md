@@ -43,6 +43,8 @@ Códigos das aulas práticas da matéria de Desenvolvimento Web Front End.
 
 [Angular Security Guide](https://v17.angular.io/guide/security) - Como o Angular te ajuda a escrever um código seguro.
 
+[JSON](https://www.json.org/json-en.html) - Guia para trabalhar com arquivos Json
+
 ## Projetos executados
 
 * Em andamento..
