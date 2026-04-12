@@ -20,10 +20,6 @@ export class TesteComponent {
 
 ### Informações relevantes
 
-* **Export:** Para deixar outro arquivo usar sua classe.
-
-* **Import:** Para puxar o que você precisa de outro lugar.
-
 * **Caminho (Path):** O caminho tem que estar perfeito (./pasta/arquivo).
 
 * **package.json:** é o arquivo mais importante de um projeto Angular/Node para criar dependências, ou seja
@@ -71,7 +67,7 @@ export class NomeModulo { }
 ```
 
 ### Standalone Components - Angular atualmente
-O uso do módulo agora não é mais obrigatório por padrão
+O uso do módulo agora não é mais obrigatório por padrão. Componentes modernos usam a flag *standalone: true* e importam suas próprias dependências diretamente.
 
 
 ### Informações relevantes
@@ -84,6 +80,7 @@ O uso do módulo agora não é mais obrigatório por padrão
 
 * **Providers: []** Quem FORNECE DADOS para mim.
 
+Obs: é possíver ter vários componentes dentro de um módulo, seja criando ou importando.
 
 ### Entendendo o @NgModule
 A melhor forma de entender um @NgModule é pensar nele como um departamento fechado dentro de uma empresa (por exemplo, um setor de contabilidade).
@@ -111,3 +108,75 @@ Ele tem seus próprios funcionários, suas próprias ferramentas e regras muito 
     - O que é: Aqui entram os "Serviços" (Services) — os arquivos que geralmente fazem a comunicação com o Banco de Dados, APIs e regras de negócio pesadas.
 
     - Na prática: Quando você coloca um serviço aqui, o módulo garante que todo componente lá dentro possa "chamar" esse especialista para pedir dados. 
+
+### Material Design
+
+* **Para instalar:** o terminal deve estar na página raiz do projeto, pois o Angular Material afeta o projeito como um todo.
+    - No terminal digite: **ng add @angular/material** (esse comando baixa o pacote e já configura todos os arquivos automaticamente.)
+
+    * 1. Choose a prebuilt theme: são opções de cores e você pode escolher a que achar mais bonita;
+
+### Lifecycly hooks - ganchos/gatilhos do ciclo de vida dos componentes
+Se os Módulos são os "departamentos" da empresa, os Lifecycle Hooks (Ganchos do Ciclo de Vida) são a rotina do funcionário (o Componente). Eles ditam tudo o que acontece desde o momento em que o componente nasce até a hora em que ele morre (é removido da tela).
+
+Entender os hooks é ter controle absoluto sobre o tempo e a memória da sua aplicação. Se você abre um processo e esquece de fechar na hora certa, você cria um vazamento de memória (memory leak) — o que é um pesadelo tanto para performance quanto para segurança.
+
+* **1. ngOnChanges (Quando há mudanças)**
+
+    - O que é: É acionado sempre que o componente recebe um dado novo de fora (através de um @Input). Ele recebe um objeto que contém as mudanças detectadas.
+
+    - Na prática: Imagine um componente de "Perfil de Usuário". Se a foto do usuário muda no banco de dados e o sistema manda a foto nova para o componente, o ngOnChanges é o alarme que avisa: "Ei, os dados mudaram, atualize a tela!".
+
+* **2. ngOnInit (Inicialização)**
+
+    - O que é: Roda uma única vez logo depois que o componente é criado e os dados iniciais são recebidos.
+
+    - Na prática: É o momento em que o funcionário senta na mesa e liga o computador. É o lugar perfeito e obrigatório para você fazer chamadas para a sua API, buscar dados no banco e carregar listas. (Nunca faça chamadas pesadas no constructor, deixe sempre para o ngOnInit!).
+
+* **3. ngAfterViewInit (Quando a tela está pronta)**
+
+    - O que é: Roda quando o Angular termina de desenhar o HTML (a "View") do componente na tela.
+
+    - Na prática: Se você precisa manipular algum botão específico, aplicar um gráfico complexo ou usar o Angular Material para mexer em algo visual que depende do HTML já existir, é aqui que você faz.
+
+* **4. ngOnDestroy (A Despedida / O "Limpa Trilhos")**
+
+    - O que é: Roda imediatamente antes do componente ser destruído (quando o usuário muda de página, por exemplo).
+
+    - Na prática: É a faxina. Se você abriu uma conexão de WebSocket, um contador (timer) ou se "inscreveu" para ficar ouvindo um banco de dados, é no ngOnDestroy que você cancela tudo isso. Se você não limpar a bagunça aqui, o processo continua rodando invisível e travando o navegador do cliente. 
+
+* **5. ngDoCheck (O Microgerenciador)**
+
+    - O que é: O Angular tem um radar automático para saber se algo mudou na tela. Mas às vezes, ele "pisca" e perde alguma mudança muito complexa (tipo um valor atualizado muito fundo dentro de um banco de dados local ou objeto complexo). O ngDoCheck permite que você crie a sua própria regra de verificação manual.
+
+    - Na prática: É como um processo rodando em background que checa o sistema a cada milissegundo perguntando: "Mudou algo? E agora, mudou?".
+
+    - Aviso de Arquitetura: Como ele é acionado durante cada ciclo de detecção de mudanças do Angular (o que acontece dezenas de vezes por segundo), se você colocar um código pesado aqui dentro, a aplicação inteira fica lenta. Use apenas quando o Angular falhar em detectar algo sozinho!
+
+* **6. ngAfterContentInit (O Recebimento da Encomenda)**
+
+    - O que é: Está 100% ligado à tag <ng-content>. Essa diretiva serve para você criar um componente "oco" e injetar HTML dentro dele de fora para dentro (imagine criar um componente de "Card" padrão, mas deixar o sistema decidir dinamicamente se o recheio será um texto, uma imagem ou um formulário).
+
+    - Na prática: Esse hook é acionado exatamente no momento em que esse "recheio" externo termina de ser projetado dentro do seu componente. É o aviso de que a encomenda foi desempacotada e você já pode manipular esse conteúdo com segurança. 
+
+* **7. ngAfterContentChecked (A Revisão Contínua da Encomenda)**
+
+    - O que é: É o passo seguinte após o ngAfterContentInit. É chamado sempre que o Angular verifica se esse conteúdo projetado sofreu alguma alteração.
+
+    - Na prática: É como se tivesses recebido a encomenda, mas continuasses a abrir a caixa repetidamente para confirmar se o conteúdo lá dentro mudou. 
+    
+    - Aviso de Performance: Tal como o ngDoCheck, ele é executado com uma frequência altíssima. Evita colocar lógica pesada aqui dentro.
+
+* **8. ngAfterViewInit (Inauguração do Ecrã)**
+
+    - O que é: É acionado apenas uma vez, assim que o Angular termina de desenhar o HTML (a View) do componente e de todos os componentes "filhos" que dependem dele.
+
+    - Na prática: É o momento em que a obra está finalmente pronta e pode inaugurar. Se precisar de manipular algum elemento visual diretamente no ecrã (como inicializar um gráfico complexo), este é o momento exato e seguro para o fazer.
+
+* **9. ngAfterViewChecked (Fiscal do Ecrã)**
+
+    - O que é: É chamado sempre que o Angular faz uma verificação para detetar se algo mudou no HTML do componente ou dos seus filhos.
+
+    - Na prática: É o fiscal que patrulha a tela inteira várias vezes por segundo para ver se um botão mudou de cor ou se um texto foi atualizado. 
+    
+    - Alerta de Performance: Sendo muito analítica e focada em sistemas seguros e eficientes, olhe para este método com desconfiança. Se colocar um cálculo complexo aqui, pode acabar sobrecarregando a memória e travar completamente o navegador do cliente!
