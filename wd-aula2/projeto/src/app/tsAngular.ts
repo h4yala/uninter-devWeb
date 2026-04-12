@@ -3,10 +3,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TesteComponent } from './teste/teste';
+import { Usuario } from './usuario/usuario';
 
 @NgModule ({
     declarations: [
-        TesteComponent
+        TesteComponent,
+        Usuario
     ],
     imports: [
         CommonModule
