@@ -180,3 +180,77 @@ Entender os hooks é ter controle absoluto sobre o tempo e a memória da sua apl
     - Na prática: É o fiscal que patrulha a tela inteira várias vezes por segundo para ver se um botão mudou de cor ou se um texto foi atualizado. 
     
     - Alerta de Performance: Sendo muito analítica e focada em sistemas seguros e eficientes, olhe para este método com desconfiança. Se colocar um cálculo complexo aqui, pode acabar sobrecarregando a memória e travar completamente o navegador do cliente!
+
+### Comunicação entre componentes
+
+* **HTML Injection:** técnica em que o conteúdo HTML é inserido dinamicamente em um componente ou elemento específico.
+
+* **ng-content:** é a diretiva mais utilizada para realizar a injeção de conteúdo HTML no Angular. Ela permite criar pontos de inserção em um componente, onde o conteúdo HTML externo pode ser incluído.
+
+    - Exemplo de como usar o **ng-content**:
+    ```typescript 
+    @Component ({
+        selector: 'app-meu-componente',
+        template:
+            <div>
+                <h2>Título do Componente</h2>
+                <ng-content></ng-content>
+            </div>
+    })
+    export class MeuComponenteComponent { }
+    ```
+O conteúdo *<p>Conteúdo inserido no componente</p>* é injetado no ponto de inserção definido por *<ng-content></ng-content>* no template do componente **MeuComponenteComponent**. Assim, o resultado renderizado será:
+
+    ```html 
+    <app-meucomponente>
+        <p> Conteúdo inserido no componente </p>
+    </app-meucomponente>
+    ```
+
+
+### Binding no Angular
+O binding no Angular é um mecanismo que permite a comunicação e sincronização de dados entre o componente e o template. Ele oferece várias maneiras de conectar e atualizar informações nos dois lados, facilitando a interatividade e a atualização dinâmica da interface do usuário.
+
+* **1. Interpolation (interpolação):** Utiliza chaves duplas {{ }} para exibir valores do componente no template.
+
+    ```html 
+    <div>
+        <h2> Título do Componente </h2>
+        <p> Conteúdo inserido no componente </p>
+    </div>
+    ```
+
+* **2. Property binding (binding de propriedade):** Permite atribuir valores de propriedades do componente a atributos de elementos HTML.
+
+    ```html 
+        <p> Meu nome é {{ nome }} </p>
+    ```
+
+* **3. Event binding (binding de evento):** Permite que os eventos gerados pelos elementos HTML, como cliques ou mudanças de valor, sejam tratados no componente.
+
+    ```html 
+    <button [disable] = "isDesabilitado"> Clique Aqui </button>
+    ```
+
+* **4. Two-way binding (binding bidirecional):** Combina o binding de propriedade e de evento para permitir a atualização bidirecional dos dados entre o componente e o template.
+
+    ```html 
+    <button [click] = "onClick()"> Clique Aqui </button>
+    ```
+
+### Estilos
+
+No Angular, existem diferentes abordagens e estilos para a criação de componentes.
+Os mais comuns são:
+
+* **Componentes separados:** cada componente Angular é definido em seu próprio arquivo, contendo o código TypeScript, o template HTML e os estilos CSS ou SCSS associados. Essa é a abordagem mais comum e recomendada para organizar e reutilizar componentes;
+
+* **Estilos embutidos:** você pode definir estilos diretamente no arquivo do componente usando o atributo styles ou styleUrls na anotação @Component. Esses estilos serão aplicados apenas ao componente específico;
+
+* **Estilos globais:** você pode adicionar estilos globais para toda a aplicação no arquivo styles.css ou em um arquivo separado, que é importado no arquivo principal do aplicativo;
+
+* **Pré-processadores CSS:** o Angular oferece suporte a pré-processadores CSS, como SCSS ou LESS. Eles permitem recursos avançados, como variáveis, mixins e aninhamento, para facilitar a estilização dos componentes;
+
+* **Frameworks de estilos:** é comum utilizar frameworks de estilos, como Bootstrap, Material Design ou Tailwind CSS, em conjunto com o Angular. Esses frameworks fornecem estilos prEdefinidos e componentes reutilizáveis que podem ser facilmente integrados aos componentes Angular.
+
+**OBS:** a escolha do estilo de componente depende das necessidades e preferências do projeto. O importante é manter uma abordagem consistente e organizada para facilitar a manutenção e a escalabilidade do aplicativo Angular.
